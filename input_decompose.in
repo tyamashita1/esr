@@ -1,0 +1,80 @@
+V1:V2:V3
+CNST:check initial guess:0
+CNST:perturb initial guess:0
+CNST:ep perturb:0.1
+CNST:smoothing(D=0):2
+CNST:number of hot batch:3
+CNST:number of cooling batch:5
+CNST:number of cold batch:5
+CNST:Temperature hot:0.008
+CNST:Temperature cold:1e-08
+CNST:number of iteration:3000
+CNST:g1 carbonate:2.0036
+CNST:g2 carbonate:2.0023
+CNST:g3 carbonate:1.9975
+LOCK:width carbonate:3e-04
+FREE:amplitude carbonate:0.749795010390121
+CNST:g1 O2-:2.06
+CNST:g2 O2-:2.001
+CNST:g3 O2-:2.001
+LOCK:width O2-:0.00015
+FREE:amplitude O2-:0.038445050300495
+CNST:g1 Hole center:2.0151
+CNST:g2 Hole center:2.007
+CNST:g3 Hole center:2.0032
+LOCK:width Hole center:0.00018
+LOCK:amplitude Hole center:0.26909462
+CNST:g1 add1:2.0683
+CNST:g2 add1:2.0683
+CNST:g3 add1:2.0018
+LOCK:width add1:2e-04
+FREE:amplitude add1:0
+FREE:cut(linear BG):0.00621488788068367
+CNST:cut auto 1=auto 0=tune:1
+CNST:LinearBG region min1:0.488
+CNST:LinearBG region max1:0.489
+CNST:LinearBG region min2:0.507
+CNST:LinearBG region max2:0.508
+LOCK:amplitude Mn:1
+LOCK:width scale Mn:1
+LOCK:amplitude Native:0
+LOCK:broadening Native:1
+LOCK:subamp1 Native:0.0
+FREE:subamp2 Native:0.116473092366464
+FREE:subamp3 Native:0.246247741979634
+FREE:subamp4 Native:0.0659017187423335
+FREE:subamp5 Native:0.0589587158632329
+LOCK:subamp6 Native:0
+FREE:subwid1 Native:0.011581297022604
+FREE:subwid2 Native:0.00153921848694364
+FREE:subwid3 Native:0.00666566029353311
+FREE:subwid4 Native:0.00174533950823797
+FREE:subwid5 Native:0.00108374968253501
+LOCK:subwid6 Native:0.0010812664402403
+LOCK:subgiv1 Native:0.495504260426887
+LOCK:subgiv2 Native:0.499164153217957
+LOCK:subgiv3 Native:0.49715487326045
+LOCK:subgiv4 Native:0.498391373852862
+LOCK:subgiv5 Native:0.498656382041184
+LOCK:subgiv6 Native:0.497145764797701
+LOCK:amplitude BG1:0
+LOCK:g BG1:2.01711297742095
+LOCK:width BG1:0.000783291226211285
+LOCK:amplitude BG2:0
+LOCK:g BG2:2.0051
+LOCK:width BG2:0.001
+CNST:refine ite:1000
+CNST:initial ep:0.01
+CNST:ymax(gross):0.7
+CNST:ymax(close-up):0.12
+CNST:ymax(2nd deriv):0.12
+NOTE:Fitting Weight region min:0.495
+NOTE:Fitting weight region max:0.503
+CNST:Fitting Weight region min:0.494
+CNST:Fitting weight region max:0.502
+CNST:Weight inside fitting region:1
+CNST:Weight outside fitting region:0
+CNST:2nd deriv weight region min:0.498
+CNST:2nd deriv weight region max:0.502
+CNST:2nd deriv weight:1e-04
+CNST:SINK:0
