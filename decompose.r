@@ -285,9 +285,6 @@ calccutslope <- function(x,y,gmn1,gmx1,gmn2,gmx2){
 #}
 
 smooth <- function(x, y, bin) {
-    return(list(x = x, y = y))
-}
-smooth_org <- function(x, y, bin) {
   if (bin >= 1) {
     # Use the filter function from base R to compute the rolling mean
     w <- rep(1, 2 * bin + 1) / (2 * bin + 1)
@@ -527,12 +524,8 @@ Temp[2:nb1] = Thot
 Temp[(nb12+1):nbatch] = Tcold
 Trate = (Tcold/Thot)**(1.0/(nbatch_cooling-1))
 for(i in 1:nbatch_cooling){ Temp[nb1+i]=Thot*Trate**(i-1) }
-#Temp[(nb1+1):nb12] = seq(Thot,Tcold,length=nbatch_cooling)
 print(Temp)
 
-#npm<-seq(1,1,length=nbatch)
-#for(i in 1:ibatchcut){npm[i]=1}
-#for(i in (ibatchcut+1):nbatch){npm[i]=2}
 
 if(initial_guess==0){
 
@@ -565,13 +558,13 @@ if( diff<pdiff ){
  fitAMP2 = fitAMP1; fitWID2 = fitWID1; fitGIV2 = fitGIV1; asubNat2=asubNat1;wsubNat2=wsubNat1;gsubNat2=gsubNat1; cut2=cut1; 
  }
  fitAMP  = fitAMP1; fitWID  = fitWID1; fitGIV  = fitGIV1; asubNat =asubNat1;wsubNat =wsubNat1;gsubNat =gsubNat1; cut0=cut1;
- print(sprintf("ib %d ite %d ep %e T %e fitAMP[3] %f qdiff %.8f *****",ibatch,i,ep,Temp0,fitAMP[3],qdiff),quote=F)
+ cat(sprintf("ib %3d ite %5d ep %e T %e fitAMP[3] %f qdiff %.8f *****\n",ibatch,i,ep,Temp0,fitAMP[3],qdiff))
  icnv=icnv+1;cnvsig[icnv]=fitAMP[3];cnvdif[icnv]=diff;
  ifail=0
 }else if(judge>judgeRmd){
  pdiff=diff
  fitAMP = fitAMP1; fitWID = fitWID1; fitGIV = fitGIV1; asubNat=asubNat1;wsubNat=wsubNat1;gsubNat=gsubNat1; cut0=cut1; 
- print(sprintf("ib %d ite %d ep %e T %e fitAMP[3] %f  diff %.8f",ibatch,i,ep,Temp0,fitAMP[3],diff),quote=F)
+ cat(sprintf("ib %3d ite %5d ep %e T %e fitAMP[3] %f  diff %.8f\n",ibatch,i,ep,Temp0,fitAMP[3],diff))
  icnv=icnv+1;cnvsig[icnv]=fitAMP[3];cnvdif[icnv]=diff;
 #ifail=0
 }else{
@@ -611,7 +604,6 @@ cut0=cut2
 
 modelBGL = BGlinear(xraw,slope=slopeMn,cut=cut0,shift=shiftBGlin) 
 modelMn = MnMarker(xraw,fitWID[1])*fitAMP[1]
-#modelNat = NativeW(xraw,fitWID[4])*fitAMP[4] 
 modelNat = NativeFit(xraw,asubNat,wsubNat,gsubNat)
 modelCO2neg = apf_CO2neg(xraw) * fitAMP[3] 
 modelBG1 = Gau6(fitGIV[4],fitWID[4],xraw) * fitAMP[4] 
@@ -626,13 +618,6 @@ for(i in 1:length(fitGIV)){ print(sprintf("fitGIV[%d] = %.8f",i,fitGIV[i])) }
 for(i in 1:length(asubNat)){ print(sprintf("asubNat[%d] = %.8f",i,asubNat[i])) }
 for(i in 1:length(wsubNat)){ print(sprintf("wsubNat[%d] = %.8f",i,wsubNat[i])) }
 for(i in 1:length(gsubNat)){ print(sprintf("gsubNat[%d] = %.8f",i,gsubNat[i])) }
-
-# print(sprintf("slope = %.8f",fitAMP[1]),quote=F)
-# print(sprintf("cut =%.8f",fitAMP[2]),quote=F)
-# print(sprintf("aMn =%.8f",fitAMP[3]),quote=F)
-# print(sprintf("aNat =%.8f",fitAMP[4]),quote=F)
-# print(sprintf("aCO2neg =%.8f",fitAMP[5]),quote=F)
-# print(sprintf("aBG1 =%.8f",fitAMP[6]),quote=F)
 
 
 wpar=par
@@ -696,10 +681,7 @@ for(iscr in 1:5){
 if(iscr==1){ ymax <-  ymax1; ymin <- -ymax; xmin <- 0.489; xmax <- 0.507; ylog=0 }
 if(iscr==2){ ymax <-  ymax2; ymin <- -ymax; xmin <- 0.489; xmax <- 0.507; ylog=0 }
 if(iscr==3){ ymax <-  5e-2; ymin <- -ymax; xmin <- 0.489; xmax <- 0.507; ylog=0 }
-#if(iscr==4){ ymax <-  ymax1; ymin <- -ymax; xmin <- 1.975; xmax <- 2.04 }
-#if(iscr==5){ ymax <-  ymax2; ymin <- -ymax; xmin <- 1.975; xmax <- 2.04 }
 if(iscr==4){ ymax <-  max(cnvsig); ymin <- min(cnvsig); xmin <- 0; xmax <- length(cnvsig); ylog=0 }
-#if(iscr==5){ ymax <-  max(cnvdif); ymin <- min(cnvdif); xmin <- 0; xmax <- length(cnvdif); ylog=1 }
 if(iscr==5){ ymax <-  1e+1; ymin <- 1e-4; xmin <- 0; xmax <- length(cnvdif); ylog=1 }
 screen(iscr) 
 par(mar=marc)
@@ -732,9 +714,6 @@ if(iscr<=3){ xvs <- sprintf("%.3f",xv) }else{ xvs <- sprintf("%.0f",xv) }
 axis(side=1,las=F,tck=tck,cex.axis=cexaxis,at=xv,labels=xvs,family="sans")
 axis(side=3,las=F,tck=tck,at=xv,labels=NA)
 
-#yv <- pretty(c(ymin,ymax))
-#if(iscr<=5){ yvs <- sprintf("%.2f",yv) }else{ yvs <- sprintf("%.3f",yv) }
-#axis(side=2,las=T,tck=tck,cex.axis=cexaxis,at=yv,labels=yvs,family="sans")
 if(ylog==0){
 axis(side=2,las=T,tck=tck,cex.axis=cexaxis,family="sans")
 axis(side=4,las=T,tck=tck,labels=NA)
@@ -797,18 +776,6 @@ if(iscr==1){
 if(iscr<=2){
 
   points(df$ginv,df$amp,cex=0.2,col="#66666600",pch=21,bg="#666666")
-#  points(df$ginv[weightfilt1dvzero==0],df$amp[weightfilt1dvzero==0],cex=0.1,pch=21,col="#FFFFFF00",bg="#0000FF")
-#  points(df$ginv[weightfilt1dvzero==1],df$amp[weightfilt1dvzero==1],cex=0.1,pch=21,col="#FFFFFF00",bg="#000000")
-# if(sum(abs(modelBGL))>0.0){    lines(xraw,modelBGL,col=cp[1]) }
-# if(sum(abs(modelMn))>0.0){     lines(xraw,modelMn,col=cp[2]) }
-# if(sum(abs(modelNat))>0.0){    lines(xraw,modelNat,col=cp[3]) }
-# if(sum(abs(modelCO2neg))>0.0){ lines(xraw,modelCO2neg,col=cp[4]) }
-# if(sum(abs(modelBG1))>0.0){    lines(xraw,modelBG1,col=cp[5]) }
-# if(sum(abs(modelBG2))>0.0){    lines(xraw,modelBG2,col=cp[6]) }
-# if(sum(abs(modelO2neg))>0.0){  lines(xraw,modelO2neg,col=cp[7]) }
-# if(sum(abs(modelHole))>0.0){   lines(xraw,modelHole,col=cp[8]) }
-# if(sum(abs(modeladd1))>0.0){   lines(xraw,modeladd1,col=cp[9]) }
-# lines(xraw,modelTOT,col="red")
   if(sum(abs(modelBGL))>0.0){    lines(wdf$ginv,wdf$modelBGL,col=cp[1]) }
   if(sum(abs(modelMn))>0.0){     lines(wdf$ginv,wdf$modelMn,col=cp[2]) }
   if(sum(abs(modelNat))>0.0){    lines(wdf$ginv,wdf$modelNat,col=cp[3]) }
@@ -820,12 +787,10 @@ if(iscr<=2){
   if(sum(abs(modeladd1))>0.0){   lines(wdf$ginv,wdf$modeladd1,col=cp[9]) }
   lines(wdf$ginv,wdf$modelTOT,col="red")
   legend((xmin+xmax)/2,ymax,col=c(cp,"red"),legend=lg,cex=0.5,ncol=3,bg="white",lwd=1,xjust=0.5)
-  #legend("topright",col=c(cp,"red"),legend=lg,cex=0.5,ncol=3,bg="white",lwd=1)
   
 }else if(iscr==3){
   dv = derivA(df$ginv, df$amp)
   points(dv$x,dv$y/dvmax,cex=0.2,col="#66666600",pch=21,bg="#666666")
-# points(dv$x[abs(dv$y/dvmax)<yigzero],dv$y[abs(dv$y/dvmax)<yigzero]/dvmax,cex=0.1,col="#0000FF")
   dv = derivA(xraw, modelTOT)
   lines(dv$x,dv$y/dvmax,cex=0.1,col="#ff0000")
 }else if(iscr==4){
