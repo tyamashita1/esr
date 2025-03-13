@@ -1,8 +1,7 @@
 library(pracma)
-library(latex2exp)
 
 # location of normalized spectrum files
-dir="data/"
+dir="./"
 
 #########
 #constants
@@ -237,14 +236,6 @@ weightIgnoreNearZero <- function(x,y,xv,yv,yigzero){
   invisible(w)
 }
 
-weightfiltlower <- function(y,masklow){
-  w=rep(1,length(y))
-  for(i in 1:length(y)){
-   if(y[i]<masklow){ w[i]=0 }
-  }
-  invisible(w)
-}
-
 calcslope <- function(x,y){
   l=length(x)
   ta=data.frame(x,y)
@@ -294,6 +285,9 @@ calccutslope <- function(x,y,gmn1,gmx1,gmn2,gmx2){
 #}
 
 smooth <- function(x, y, bin) {
+    return(list(x = x, y = y))
+}
+smooth_org <- function(x, y, bin) {
   if (bin >= 1) {
     # Use the filter function from base R to compute the rolling mean
     w <- rep(1, 2 * bin + 1) / (2 * bin + 1)
@@ -437,7 +431,6 @@ for(i in 1:length(par$V1)){
    if(par$V2[i]=="2nd deriv weight region max"){ H2w1=par$V3[i] }
    if(par$V2[i]=="2nd deriv weight"){ Weight2=par$V3[i] }
    if(par$V2[i]=="IgnoreNearZero 2nd deriv"){ yigzero=par$V3[i] }
-   if(par$V2[i]=="mask lower amp"){ masklow=par$V3[i] }
 
    if(par$V2[i]=="SINK"){ isink=par$V3[i] }
  }#NOTE
@@ -490,11 +483,10 @@ ydv = derivA(df$ginv,df$amp)$y
 ddv = data.frame(xdv=xdv,ydv=ydv)
 dvmax = max(abs(ydv))
 weightfilt1 <- weightfilt(xsmt,Hw0,Hw1,WeightIn,WeightOUT)
-weightfilt1low <- weightfiltlower(df$amp,masklow)
-weightfilt1dvzero <- weightIgnoreNearZero(df$ginv,df$amp,xdv,ydv/dvmax,yigzero)
 weightfilt2 <- weightfilt(xdv,H2w0,H2w1,Weight2,0.0)
 
  qdiff=1e+30
+ pdiff=1e+30
  ep=ep0
 
  fitAMP=c(aMn,aNat,aCO2neg,aBG1,aO2neg,aHole,aadd1,aBG2)
@@ -560,24 +552,27 @@ model = BGlinear(xraw,slope=slopeMn,cut=cut1,shift=shiftBGlin) + MnMarker(xraw,f
 modelsmth = smooth(xraw,model,smoothingbin)
 vdiff1 = ( df$amp - modelsmth$y )**2
 vdiff2 = ( ydv - derivA(modelsmth$x,modelsmth$y)$y )**2
-diff1 = sum( vdiff1*weightfilt1*weightfilt1dvzero*weightfilt1low ) 
+diff1 = sum( vdiff1*weightfilt1 ) 
 diff2 = sum( vdiff2*weightfilt2 ) /dvmax
 diff = diff1+diff2
 
-judge=exp(-diff/Temp0)
+judge=exp(-abs(diff-pdiff)/Temp0)
 judgeRmd=runif(1,min=0,max=1)
 
-if( diff<qdiff ){
- qdiff=diff
+if( diff<pdiff ){
+ pdiff=diff
+ if(diff<qdiff){ qdiff=diff
  fitAMP2 = fitAMP1; fitWID2 = fitWID1; fitGIV2 = fitGIV1; asubNat2=asubNat1;wsubNat2=wsubNat1;gsubNat2=gsubNat1; cut2=cut1; 
+ }
  fitAMP  = fitAMP1; fitWID  = fitWID1; fitGIV  = fitGIV1; asubNat =asubNat1;wsubNat =wsubNat1;gsubNat =gsubNat1; cut0=cut1;
  print(sprintf("ib %d ite %d ep %e T %e fitAMP[3] %f qdiff %.8f *****",ibatch,i,ep,Temp0,fitAMP[3],qdiff),quote=F)
- icnv=icnv+1;cnvsig[icnv]=fitAMP2[3];cnvdif[icnv]=diff;
+ icnv=icnv+1;cnvsig[icnv]=fitAMP[3];cnvdif[icnv]=diff;
  ifail=0
 }else if(judge>judgeRmd){
+ pdiff=diff
  fitAMP = fitAMP1; fitWID = fitWID1; fitGIV = fitGIV1; asubNat=asubNat1;wsubNat=wsubNat1;gsubNat=gsubNat1; cut0=cut1; 
  print(sprintf("ib %d ite %d ep %e T %e fitAMP[3] %f  diff %.8f",ibatch,i,ep,Temp0,fitAMP[3],diff),quote=F)
-#icnv=icnv+1;cnvsig[icnv]=fitAMP[3];cnvdif[icnv]=diff;
+ icnv=icnv+1;cnvsig[icnv]=fitAMP[3];cnvdif[icnv]=diff;
 #ifail=0
 }else{
  ifail=ifail+1
@@ -718,17 +713,15 @@ abline(v=Hw0,lty=2,lwd=0.5)
 abline(v=Hw1,lty=2,lwd=0.5)
 abline(v=H2w0,lty=3,lwd=0.5)
 abline(v=H2w1,lty=3,lwd=0.5)
-abline(h=masklow,lty=2,lwd=0.5)
 }
 if(iscr==3){
 abline(v=Hw0,lty=2,lwd=0.5)
 abline(v=Hw1,lty=2,lwd=0.5)
 abline(v=H2w0,lty=3,lwd=0.5)
 abline(v=H2w1,lty=3,lwd=0.5)
-abline(h=masklow,lty=2,lwd=0.5)
 }
 
-if(iscr<=3){ mtext(TeX("$\\beta H/h\\nu$"),side=1,line=1.5,cex=0.8) }
+if(iscr<=3){ mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8) }
 if(iscr>=4){ mtext("Number of updates",side=1,line=1.5,cex=0.8) }
 if(iscr<=3){ mtext("Intensity (arb.u.)",side=2,line=3,cex=0.8) }
 if(iscr==4){ mtext("Amplitude of radical (arb.u.)",side=2,line=3,cex=0.8) }

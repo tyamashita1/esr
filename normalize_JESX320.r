@@ -1,4 +1,3 @@
-library(latex2exp)
 ################################
 #constants
 bohr.mag <- 9.2740154E-24 #J/T
@@ -171,7 +170,7 @@ par(mgp=mgpc)
 plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n")
 #plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n",log="y")
 
-mtext(TeX("$h\\nu/\\beta H"),side=1,line=1.5,cex=0.8)
+mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8)
 mtext("Amplitude",side=2,line=3,cex=0.8)
 mtext("X-axis converted",side=3,line=0.5,cex=0.6)
 
@@ -215,7 +214,7 @@ par(mgp=mgpc)
 plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n")
 #plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n",log="y")
 
-mtext(TeX("$h\\nu/\\beta H"),side=1,line=1.5,cex=0.8)
+mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8)
 mtext("Amplitude",side=2,line=3,cex=0.8)
 mtext("Second derivative",side=3,line=0.5,cex=0.6)
 
@@ -278,7 +277,7 @@ par(mgp=mgpc)
 plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n")
 #plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n",log="y")
 
-mtext(TeX("$h\\nu/\\beta H"),side=1,line=1.5,cex=0.8)
+mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8)
 mtext("Amplitude",side=2,line=3,cex=0.8)
 mtext("Mn marker calibrated",side=3,line=0.5,cex=0.6)
 
@@ -324,7 +323,7 @@ par(mgp=mgpc)
 plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="r",xlab=NA,ylab=NA,bty="n")
 #plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n",log="y")
 
-mtext(TeX("$h\\nu/\\beta H"),side=1,line=1.5,cex=0.8)
+mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8)
 mtext("Amplitude",side=2,line=3,cex=0.8)
 mtext("Normalized by Mn marker amplitude",side=3,line=0.5,cex=0.6)
 
@@ -389,7 +388,7 @@ par(mgp=mgpc)
 plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="r",xlab=NA,ylab=NA,bty="n")
 #plot(1,1,type='n',ylim=c(ymin,ymax),xlim=c(xmin,xmax),xaxt="n",yaxt="n",xaxs="i",yaxs="i",xlab=NA,ylab=NA,bty="n",log="y")
 
-mtext(TeX("$h\\nu/\\beta H"),side=1,line=1.5,cex=0.8)
+mtext("Normalized magnetic field",side=1,line=1.5,cex=0.8)
 mtext("Amplitude",side=2,line=3,cex=0.8)
 mtext("Height slope normalized, output to csv",side=3,line=0.5,cex=0.6)
 
